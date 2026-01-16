@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+
+
 export default function Dashboard() {
 
     const [playerName, setPlayerName] = useState("")
@@ -9,8 +11,18 @@ export default function Dashboard() {
     const [leagueName, setLeagueName] = useState("")
     const [coachName, setCoachName] = useState("")
 
-    function handleSearch() {
-        console.log ("Jogador", playerName)
+    async function handleSearch() {
+      if (!playerName) {
+        alert("Digite o nome de algum jogador")
+        return
+      }
+      try {
+        const response = await fetch(`/api/players?search=${playerName}`)
+        const data = await response.json();
+        console.log(data)
+      } catch (error) {
+        console.error ("Erro ao buscar jogador", error)
+      }
     }
     
   return (
