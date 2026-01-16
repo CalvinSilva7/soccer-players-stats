@@ -1,31 +1,32 @@
 import axios from 'axios'
 import { NextResponse } from "next/server"
 
+const API_URL = "https://v3.football.api-sports.io/players"
+const API_KEY = process.env.NEXT_PUBLIC_API_FOOTBALL_KEY!
+
 export async function GET(req: Request) {
     const {searchParams} = new URL(req.url);
     const search = searchParams.get("search")
     const league = searchParams.get("league")
-    const team = searchParams.get("team")
 
-    if (!search) {
+
+    if (!search || !league) {
         return NextResponse.json(
             {error: "Parametro search é obrigatorio"},
             {status: 400}
         )
     }
     try {
-        console.log("🚀 Chamando API Football...");
         const response = await axios.get (
-        "https://v3.football.api-sports.io/players", {
+        API_URL, {
             params: {
                 search,
-                league: league ? Number(league) : 307,
-                team: team || undefined,
+                league,
                 season: 2023
 
             }, 
                 headers: {
-                    "x-apisports-key": process.env.NEXT_PUBLIC_API_FOOTBALL_KEY!,
+                    "x-apisports-key": API_KEY,
                 },
         }
     )

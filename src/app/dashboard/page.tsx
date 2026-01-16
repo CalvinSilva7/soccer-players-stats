@@ -16,15 +16,29 @@ export default function Dashboard() {
         alert("Digite o nome de algum jogador")
         return
       }
-      try {
-        const response = await fetch(`/api/players?search=${playerName}`)
-        const data = await response.json();
-        console.log(data)
-      } catch (error) {
-        console.error ("Erro ao buscar jogador", error)
+      let leagueId: number | undefined
+      
+      if (leagueName) {
+        const leagueRes = await fetch(`/api/leagues?search=${leagueName}`)
+        if (!leagueRes.ok) {
+          const errorData = await leagueRes.json().catch(() => ({})); 
+          console.error("Erro na API de Ligas:", errorData);
+          alert("Liga não encontrada ou erro na busca.");
+          return; // Para a execução se a liga falhar
+        }
+        const leagueData = await leagueRes.json()
+        leagueId = leagueData.leagueId
       }
+      const params = new URLSearchParams({
+        search: playerName,
+        ...(leagueId&& {league: String(leagueId)})
+      })
+      const response = await fetch(`/api/players?${params.toString()}`)
+      const data = await response.json()
+
+      console.log(data)
     }
-    
+
   return (
     <div className="min-h-screen bg-zinc-100 p-6">
 
