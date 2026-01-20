@@ -19,7 +19,6 @@ export async function GET(req: Request) {
         const response = await axios.get(API_URL, {
             params: { search },
             headers: {
-                // Header correto exigido pela API-Sports
                 "x-apisports-key": API_KEY
             }
         })
