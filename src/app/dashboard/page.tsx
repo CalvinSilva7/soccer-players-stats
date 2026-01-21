@@ -12,10 +12,6 @@ export default function Dashboard() {
     const [coachName, setCoachName] = useState("")
 
     async function handleSearch() {
-      if (!playerName) {
-        alert("Digite o nome de algum jogador")
-        return
-      }
       let leagueId: number | undefined
       
       if (leagueName) {
@@ -24,7 +20,7 @@ export default function Dashboard() {
           const errorData = await leagueRes.json().catch(() => ({})); 
           console.error("Erro na API de Ligas:", errorData);
           alert("Liga não encontrada ou erro na busca.");
-          return; // Para a execução se a liga falhar
+          return;
         }
         const leagueData = await leagueRes.json()
         leagueId = leagueData.leagueId
@@ -33,12 +29,19 @@ export default function Dashboard() {
         search: playerName,
         ...(leagueId&& {league: String(leagueId)})
       })
+      if (playerName) {
       const response = await fetch(`/api/players?${params.toString()}`)
       const data = await response.json()
 
       console.log(data)
     }
-
+    if (coachName) {
+      const res = await fetch(`/api/coach?search=${coachName}`)
+      const result = await res.json()
+      console.log(result)
+    }
+  }
+      
   return (
     <div className="min-h-screen bg-zinc-100 p-6">
 
