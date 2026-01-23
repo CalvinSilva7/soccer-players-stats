@@ -40,6 +40,12 @@ export default function Dashboard() {
       const result = await res.json()
       console.log(result)
     }
+    if (teamName) {
+      const response = await fetch(`/api/teams?search=${teamName}`)
+      const data = await response.json()
+
+      console.log(data)
+    }
   }
       
   return (
