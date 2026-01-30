@@ -14,8 +14,6 @@ export async function GET(req: Request) {
             { status: 400 }
         )
     }
-
-    try {
         const response = await axios.get(API_URL, {
             params: { search },
             headers: {
@@ -23,22 +21,16 @@ export async function GET(req: Request) {
             }
         })
 
-        const leagueId = response.data.response[0]?.league?.id
-
-        if (!leagueId) {
-            return NextResponse.json(
-                { error: "Liga não encontrada" },
-                { status: 404 }
-            )
+        const leagues = response.data.response.map((item: any) => ({
+            id: item.league.id,
+            name: item.league.name,
+            country: item.country.name,
+            logo: item.league.logo
+        }));
+        
+        if (leagues.length === 0) {
+            return NextResponse.json({ error: "Liga não encontrada" }, { status: 404 });
         }
-
-        return NextResponse.json({ leagueId })
-
-    } catch (error) {
-        console.error("Erro ao buscar liga:", error)
-        return NextResponse.json(
-            { error: "Erro interno ao buscar liga" },
-            { status: 500 }
-        )
+        
+        return NextResponse.json(leagues);
     }
-}
