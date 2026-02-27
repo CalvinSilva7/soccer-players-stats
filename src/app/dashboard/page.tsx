@@ -65,7 +65,7 @@ export default function Dashboard() {
       }, 500);
   
       return () => clearTimeout(delayDebounce);
-    }, [playerName, selectedLeague]); // Adicionado selectedLeague aqui
+    }, [playerName, selectedLeague]); 
 
     async function handleSearch() {
     if (coachName) {
@@ -82,16 +82,16 @@ export default function Dashboard() {
   }
       
   return (
-    <div className="min-h-screen bg-zinc-100 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-sky-50 p-6">
 
-  <h1 className="text-2xl font-bold mb-6">
+  <h1 className="text-2xl font-bold mb-6 text-emerald-800">
     Soccer Player Stats
   </h1>
 
   <div className="space-y-6">
 
-  <section className="bg-white p-4 rounded-lg shadow relative">
-          <h2 className="font-semibold mb-2 text-zinc-700">1. Buscar e selecionar liga</h2>
+  <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100 relative">
+          <h2 className="font-semibold mb-2 text-emerald-800">1. Buscar e selecionar liga</h2>
           <div className="relative">
             <input
               type="text"
@@ -99,68 +99,67 @@ export default function Dashboard() {
               value={leagueName}
               onChange={(e) => {
                 setLeagueName(e.target.value);
-                setSelectedLeague(null); // Reseta se mudar o texto
+                setSelectedLeague(null);
               }}
-              className={`border rounded-lg p-2 w-full focus:outline-none focus:ring-2 ${selectedLeague ? 'border-green-500 ring-green-200' : 'border-zinc-300 focus:ring-blue-500'}`}
+              className={`border rounded-lg p-2.5 w-full focus:outline-none focus:ring-2 placeholder:text-slate-400 ${selectedLeague ? 'border-emerald-500 ring-emerald-200 bg-emerald-50/50' : 'border-slate-300 focus:ring-emerald-400 focus:border-emerald-400'}`}
             />
-            {isSearchingLeague && <div className="absolute right-3 top-2.5 animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full" />}
+            {isSearchingLeague && <div className="absolute right-3 top-2.5 animate-spin h-5 w-5 border-2 border-emerald-500 border-t-transparent rounded-full" />}
           </div>
 
-          {/* LISTA DE SUGESTÕES DE LIGA */}
           {leagueSuggestions.length > 0 && !selectedLeague && (
-            <ul className="absolute z-[60] left-0 right-0 mt-1 bg-white border border-zinc-200 rounded-lg shadow-xl max-h-48 overflow-y-auto">
+            <ul className="absolute z-[60] left-0 right-0 mt-1 bg-white border border-emerald-200 rounded-lg shadow-xl max-h-48 overflow-y-auto">
               {leagueSuggestions.map((league) => (
                 <li
                   key={league.id}
-                  className="p-3 hover:bg-blue-50 cursor-pointer border-b border-zinc-50 last:border-none"
+                  className="p-3 hover:bg-emerald-50 cursor-pointer border-b border-slate-50 last:border-none"
                   onClick={() => {
                     setSelectedLeague({ id: league.id, name: league.name });
                     setLeagueName(league.name);
                     setLeagueSuggestions([]);
                   }}
                 >
-                  <p className="font-bold text-zinc-800">{league.name}</p>
+                  <p className="font-bold text-slate-800">{league.name}</p>
                 </li>
               ))}
             </ul>
           )}
         </section>
     
-  <section className="bg-white p-4 rounded-lg shadow relative">
-          <h2 className="font-semibold mb-2 text-zinc-700">Buscar jogador</h2>
+  <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100 relative">
+          <h2 className="font-semibold mb-2 text-emerald-800">Buscar jogador</h2>
           <div className="relative">
             <input
               type="text"
               placeholder="Digite ao menos 3 letras (ex: Neymar)"
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
-              className="border border-zinc-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-slate-300 rounded-lg p-2.5 w-full focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 placeholder:text-slate-400"
             />
             
             {isSearching && (
               <div className="absolute right-3 top-2.5">
-                <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+                <div className="animate-spin h-5 w-5 border-2 border-emerald-500 border-t-transparent rounded-full"></div>
               </div>
             )}
           </div>
 
           {playerSuggestions.length > 0 && (
-            <ul className="absolute z-50 left-0 right-0 mt-1 bg-white border border-zinc-200 rounded-lg shadow-xl max-h-64 overflow-y-auto">
+            <ul className="absolute z-50 left-0 right-0 mt-1 bg-white border border-emerald-200 rounded-lg shadow-xl max-h-64 overflow-y-auto">
               {playerSuggestions.map((player) => (
                 <li
                   key={player.id}
-                  className="p-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 border-b border-zinc-50 last:border-none"
+                  className="p-3 hover:bg-emerald-50 cursor-pointer flex items-center gap-3 border-b border-slate-50 last:border-none"
                   onClick={() => {
                     setPlayerName(player.name);
                     setPlayerSuggetions([]);
                   }}
                 >
                   {player.photo && (
-                    <img src={player.photo} alt={player.name} className="w-10 h-10 rounded-full bg-zinc-100" />
+                    <img src={player.photo} alt={player.name} className="w-10 h-10 rounded-full bg-emerald-100" />
                   )}
                   <div>
-                    <p className="font-bold text-zinc-800">{player.name}</p>
-                    <p className="text-xs text-zinc-500">{player.team} — {player.nationality}</p>
+                    <p className="font-bold text-slate-800">{player.name}</p>
+                    <p className="text-xs text-slate-500">{player.team} — {player.nationality}</p>
                   </div>
                 </li>
               ))}
@@ -168,31 +167,31 @@ export default function Dashboard() {
           )}
         </section>
 
-    <section className="bg-white p-4 rounded-lg shadow">
-      <h2 className="font-semibold mb-2">Buscar time</h2>
+    <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100">
+      <h2 className="font-semibold mb-2 text-emerald-800">Buscar time</h2>
       <input
         type="text"
         placeholder="Digite o nome do time"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
-        className="border border-zinc-300 rounded-lg p-2 w-full"
+        className="border border-slate-300 rounded-lg p-2.5 w-full focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 placeholder:text-slate-400"
       />
     </section>
 
-    <section className="bg-white p-4 rounded-lg shadow">
-      <h2 className="font-semibold mb-2">Buscar treinador</h2>
+    <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100">
+      <h2 className="font-semibold mb-2 text-emerald-800">Buscar treinador</h2>
       <input
         type="text"
         placeholder="Digite o nome do treinador"
         value={coachName}
         onChange={(e) => setCoachName (e.target.value)}
-        className="border border-zinc-300 rounded-lg p-2 w-full"
+        className="border border-slate-300 rounded-lg p-2.5 w-full focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 placeholder:text-slate-400"
       />
     </section>
         <div className="flex justify-end">
           <button
             onClick={handleSearch}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-emerald-600 text-white px-6 py-2.5 rounded-lg hover:bg-emerald-700 font-medium shadow-sm"
           >
             Buscar
           </button>
