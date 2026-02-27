@@ -81,11 +81,6 @@ export default function Dashboard() {
     }
   }
       
-  /*
-   * DESIGN — Para manter o front visível: evitar fundo e textos só em zinc (cinza).
-   * Usar: gradiente no fundo, títulos em cor forte (emerald-800), bordas/focus em emerald,
-   * placeholders com placeholder:text-slate-400.
-   */
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-sky-50 p-6">
 
@@ -104,14 +99,13 @@ export default function Dashboard() {
               value={leagueName}
               onChange={(e) => {
                 setLeagueName(e.target.value);
-                setSelectedLeague(null); // Reseta se mudar o texto
+                setSelectedLeague(null);
               }}
               className={`border rounded-lg p-2.5 w-full focus:outline-none focus:ring-2 placeholder:text-slate-400 ${selectedLeague ? 'border-emerald-500 ring-emerald-200 bg-emerald-50/50' : 'border-slate-300 focus:ring-emerald-400 focus:border-emerald-400'}`}
             />
             {isSearchingLeague && <div className="absolute right-3 top-2.5 animate-spin h-5 w-5 border-2 border-emerald-500 border-t-transparent rounded-full" />}
           </div>
 
-          {/* LISTA DE SUGESTÕES DE LIGA */}
           {leagueSuggestions.length > 0 && !selectedLeague && (
             <ul className="absolute z-[60] left-0 right-0 mt-1 bg-white border border-emerald-200 rounded-lg shadow-xl max-h-48 overflow-y-auto">
               {leagueSuggestions.map((league) => (
