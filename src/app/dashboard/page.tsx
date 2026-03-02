@@ -56,6 +56,9 @@ export default function Dashboard() {
           if (response.ok) {
             const data = await response.json();
             setPlayerSuggetions(data);
+            if (data.length > 0) {
+              console.log("Sugestões de jogadores:", data.map((p: { id: number; name: string; team?: string; nationality?: string }) => ({ id: p.id, name: p.name, team: p.team, nationality: p.nationality })));
+            }
           }
         } catch (error) {
           console.error("Erro ao buscar jogadores:", error);
@@ -150,6 +153,7 @@ export default function Dashboard() {
                   key={player.id}
                   className="p-3 hover:bg-emerald-50 cursor-pointer flex items-center gap-3 border-b border-slate-50 last:border-none"
                   onClick={() => {
+                    console.log("Jogador selecionado:", { id: player.id, name: player.name, team: player.team, nationality: player.nationality });
                     setPlayerName(player.name);
                     setPlayerSuggetions([]);
                   }}
@@ -193,7 +197,7 @@ export default function Dashboard() {
             onClick={handleSearch}
             className="bg-emerald-600 text-white px-6 py-2.5 rounded-lg hover:bg-emerald-700 font-medium shadow-sm"
           >
-            Buscar
+            Buscar 
           </button>
         </div>
 

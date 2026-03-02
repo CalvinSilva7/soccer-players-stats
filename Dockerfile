@@ -27,6 +27,9 @@ RUN npm ci --include=dev
 # Copy application code
 COPY . .
 
+ARG NEXT_PUBLIC_API_FOOTBALL_KEY
+ENV NEXT_PUBLIC_API_FOOTBALL_KEY=$NEXT_PUBLIC_API_FOOTBALL_KEY
+
 # Build application
 RUN npx next build --experimental-build-mode compile
 
