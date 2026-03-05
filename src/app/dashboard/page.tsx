@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-
-
 export default function Dashboard() {
 
     const [playerName, setPlayerName] = useState("")
