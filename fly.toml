@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for soccer-players-stats on 2026-02-27T14:10:41-03:00
+# fly.toml app configuration file generated for soccer-players-stats on 2026-03-05T10:35:38-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,8 +7,6 @@ app = 'soccer-players-stats'
 primary_region = 'gru'
 
 [build]
-[build.args]
-  NEXT_PUBLIC_API_FOOTBALL_KEY = "78a9273782fbfea8869b0080a98bdde6"
 
 [http_service]
   internal_port = 3000
