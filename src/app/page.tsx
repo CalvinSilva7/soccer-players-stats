@@ -52,19 +52,24 @@ export default function Home() {
         onChange={(e) => setSenha(e.target.value)}
         className="border border-zinc-800 rounded-lg p-2"
       />
-      <div className="flex justify-center gap-2">
-        <button
-          onClick={handleEntrar}
-          disabled={loading}
-          className="bg-blue-500 text-white rounded-lg p-2 disabled:opacity-50"
-        >
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-        <Link
-          href="/cadastrar"
-          className="bg-red-500 text-white rounded-lg p-2"
-        >
-          Cadastrar
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex justify-center gap-2">
+          <button
+            onClick={handleEntrar}
+            disabled={loading}
+            className="bg-blue-500 text-white rounded-lg p-2 disabled:opacity-50"
+          >
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+          <Link
+            href="/cadastrar"
+            className="bg-red-500 text-white rounded-lg p-2"
+          >
+            Cadastrar
+          </Link>
+        </div>
+        <Link href="/esqueci-senha" className="text-blue-500 underline text-sm">
+          Esqueci minha senha
         </Link>
       </div>
     </div>
