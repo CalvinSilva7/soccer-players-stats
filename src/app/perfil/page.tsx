@@ -30,7 +30,6 @@ export default function Perfil() {
       })
       .catch((err) => {
         console.log("ERRO:", err);
-        //  router.push("/");
       });
   }, []);
 
