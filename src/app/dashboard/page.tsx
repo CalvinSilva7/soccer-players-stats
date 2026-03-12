@@ -21,6 +21,9 @@ export default function Dashboard() {
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
   const [summary, setSummary] = useState("");
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [teamData, setTeamData] = useState<any>(null);
+  const [fixtures, setFixtures] = useState<any[]>([]);
+  const [loadingFixtures, setLoadingFixtures] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -113,10 +116,23 @@ export default function Dashboard() {
       console.log(result);
     }
     if (teamName) {
-      const response = await fetch(`/api/teams?search=${teamName}`);
-      const data = await response.json();
+      setLoadingFixtures(true);
+      try {
+        const teamRes = await fetch(`/api/teams?search=${teamName}`);
+        const team = await teamRes.json();
+        setTeamData(team);
 
-      console.log(data);
+        if (team.id) {
+          const fixturesRes = await fetch(`/api/fixtures?team=${team.id}`);
+          const fixturesData = await fixturesRes.json();
+          console.log("FIXTURES:", fixturesData);
+          setFixtures(fixturesData);
+        }
+      } catch {
+        setFixtures([]);
+      } finally {
+        setLoadingFixtures(false);
+      }
     }
   }
 
@@ -342,6 +358,80 @@ export default function Dashboard() {
             className="border border-slate-300 rounded-lg p-2.5 w-full focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 placeholder:text-slate-400"
           />
         </section>
+        {teamData && (
+          <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100">
+            <div className="flex items-center gap-3 mb-4">
+              {teamData.logo && (
+                <img
+                  src={teamData.logo}
+                  alt={teamData.name}
+                  className="w-12 h-12"
+                />
+              )}
+              <div>
+                <h2 className="text-lg font-bold text-slate-800">
+                  {teamData.name}
+                </h2>
+                <p className="text-sm text-slate-500">
+                  {teamData.country} • Fundado em {teamData.founded}
+                </p>
+                <p className="text-sm text-slate-400">
+                  {teamData.stadium}, {teamData.city}
+                </p>
+              </div>
+            </div>
+
+            {loadingFixtures && (
+              <p className="text-emerald-600 animate-pulse">
+                Buscando partidas...
+              </p>
+            )}
+
+            {fixtures.length > 0 && (
+              <div>
+                <h3 className="font-semibold text-emerald-800 mb-2">
+                  Últimas partidas
+                </h3>
+                <div className="space-y-2">
+                  {fixtures.map((fixture) => (
+                    <a
+                      key={fixture.id}
+                      href={`/partida/${fixture.id}`}
+                      className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-emerald-50 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={fixture.homeTeam.logo}
+                          alt=""
+                          className="w-6 h-6"
+                        />
+                        <span className="text-sm font-medium">
+                          {fixture.homeTeam.name}
+                        </span>
+                      </div>
+                      <span className="text-lg font-bold text-slate-800">
+                        {fixture.score.home} - {fixture.score.away}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">
+                          {fixture.awayTeam.name}
+                        </span>
+                        <img
+                          src={fixture.awayTeam.logo}
+                          alt=""
+                          className="w-6 h-6"
+                        />
+                      </div>
+                      <span className="text-xs text-slate-400">
+                        {new Date(fixture.date).toLocaleDateString("pt-BR")}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
         <div className="flex justify-end">
           <button
             onClick={handleSearch}
