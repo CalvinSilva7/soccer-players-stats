@@ -18,6 +18,9 @@ export default function Dashboard() {
   const [leagueSuggestions, setLeagueSuggestions] = useState<any[]>([]);
   const [userName, setUserName] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
+  const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
+  const [summary, setSummary] = useState("");
+  const [loadingSummary, setLoadingSummary] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -117,6 +120,31 @@ export default function Dashboard() {
     }
   }
 
+  const handlePlayerSelect = async (player: any) => {
+    setPlayerName(player.name);
+    setPlayerSuggetions([]);
+    setSelectedPlayer(player);
+    setSummary("");
+    setLoadingSummary(true);
+
+    try {
+      const response = await fetch("/api/players/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerName: player.name,
+          stats: player,
+        }),
+      });
+      const data = await response.json();
+      setSummary(data.summary);
+    } catch {
+      setSummary("Erro ao gerar resumo");
+    } finally {
+      setLoadingSummary(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-sky-50 p-6">
       <h1 className="text-2xl font-bold mb-6 text-emerald-800">
@@ -189,16 +217,7 @@ export default function Dashboard() {
                 <li
                   key={player.id}
                   className="p-3 hover:bg-emerald-50 cursor-pointer flex items-center gap-3 border-b border-slate-50 last:border-none"
-                  onClick={() => {
-                    console.log("Jogador selecionado:", {
-                      id: player.id,
-                      name: player.name,
-                      team: player.team,
-                      nationality: player.nationality,
-                    });
-                    setPlayerName(player.name);
-                    setPlayerSuggetions([]);
-                  }}
+                  onClick={() => handlePlayerSelect(player)}
                 >
                   {player.photo && (
                     <img
@@ -218,7 +237,88 @@ export default function Dashboard() {
             </ul>
           )}
         </section>
+        {selectedPlayer && (
+          <section className="bg-white p-6 rounded-xl shadow-md border border-emerald-100">
+            <div className="flex items-center gap-4 mb-4">
+              {selectedPlayer.photo && (
+                <img
+                  src={selectedPlayer.photo}
+                  alt={selectedPlayer.name}
+                  className="w-20 h-20 rounded-full"
+                />
+              )}
+              <div>
+                <h2 className="text-xl font-bold text-slate-800">
+                  {selectedPlayer.name}
+                </h2>
+                <p className="text-slate-500">
+                  {selectedPlayer.team} — {selectedPlayer.nationality}
+                </p>
+                <p className="text-sm text-slate-400">
+                  {selectedPlayer.position} • {selectedPlayer.age} anos
+                </p>
+              </div>
+            </div>
 
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-emerald-50 p-3 rounded-lg text-center">
+                <p className="text-2xl font-bold text-emerald-700">
+                  {selectedPlayer.appearances ?? "-"}
+                </p>
+                <p className="text-xs text-slate-500">Jogos</p>
+              </div>
+              <div className="bg-emerald-50 p-3 rounded-lg text-center">
+                <p className="text-2xl font-bold text-emerald-700">
+                  {selectedPlayer.goals ?? "-"}
+                </p>
+                <p className="text-xs text-slate-500">Gols</p>
+              </div>
+              <div className="bg-emerald-50 p-3 rounded-lg text-center">
+                <p className="text-2xl font-bold text-emerald-700">
+                  {selectedPlayer.assists ?? "-"}
+                </p>
+                <p className="text-xs text-slate-500">Assistências</p>
+              </div>
+              <div className="bg-yellow-50 p-3 rounded-lg text-center">
+                <p className="text-2xl font-bold text-yellow-600">
+                  {selectedPlayer.yellowCards ?? "-"}
+                </p>
+                <p className="text-xs text-slate-500">Amarelos</p>
+              </div>
+              <div className="bg-red-50 p-3 rounded-lg text-center">
+                <p className="text-2xl font-bold text-red-600">
+                  {selectedPlayer.redCards ?? "-"}
+                </p>
+                <p className="text-xs text-slate-500">Vermelhos</p>
+              </div>
+              <div className="bg-blue-50 p-3 rounded-lg text-center">
+                <p className="text-2xl font-bold text-blue-600">
+                  {selectedPlayer.rating
+                    ? Number(selectedPlayer.rating).toFixed(1)
+                    : "-"}
+                </p>
+                <p className="text-xs text-slate-500">Rating</p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {loadingSummary && (
+          <div className="bg-white p-4 rounded-xl shadow-md border border-emerald-100">
+            <p className="text-emerald-600 animate-pulse">
+              Gerando resumo com IA...
+            </p>
+          </div>
+        )}
+
+        {summary && (
+          <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100">
+            <h2 className="font-semibold mb-2 text-emerald-800">
+              Resumo do Jogador (IA)
+            </h2>
+            <p className="text-slate-700 whitespace-pre-line">{summary}</p>
+          </section>
+        )}
         <section className="bg-white p-4 rounded-xl shadow-md border border-emerald-100">
           <h2 className="font-semibold mb-2 text-emerald-800">Buscar time</h2>
           <input
