@@ -113,7 +113,6 @@ export default function Dashboard() {
     if (coachName) {
       const res = await fetch(`/api/coach?search=${coachName}`);
       const result = await res.json();
-      console.log(result);
     }
     if (teamName) {
       setLoadingFixtures(true);
@@ -125,7 +124,6 @@ export default function Dashboard() {
         if (team.id) {
           const fixturesRes = await fetch(`/api/fixtures?team=${team.id}`);
           const fixturesData = await fixturesRes.json();
-          console.log("FIXTURES:", fixturesData);
           setFixtures(fixturesData);
         }
       } catch {

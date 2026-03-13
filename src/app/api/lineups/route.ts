@@ -28,7 +28,6 @@ export async function GET(req: Request) {
         "x-apisports-key": API_KEY,
       },
     });
-    console.log("LINEUPS API:", JSON.stringify(response.data, null, 2));
     if (!response.data.response || response.data.response.length === 0) {
       return NextResponse.json(
         { error: "Lineup não disponível" },

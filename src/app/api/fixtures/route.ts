@@ -26,7 +26,6 @@ export async function GET(req: Request) {
         "x-apisports-key": API_KEY,
       },
     });
-    console.log("FIXTURES API:", response.data);
     if (!response.data.response || response.data.response.length === 0) {
       return NextResponse.json([]);
     }

@@ -18,7 +18,6 @@ export async function POST(request: Request) {
     const { payload } = await jwtVerify(token, secret);
     const formData = await request.formData();
     const file = formData.get("avatar") as File;
-    console.log("TIPO:", typeof file, file);
     if (!file) {
       return NextResponse.json(
         { error: "Nenhum arquivo enviado" },
@@ -51,7 +50,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ avatar: result.secure_url });
   } catch (err: any) {
-    console.log("ERRO UPLOAD:", err);
     return NextResponse.json(
       { error: "Erro ao fazer upload" },
       { status: 500 },

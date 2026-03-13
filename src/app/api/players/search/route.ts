@@ -24,11 +24,10 @@ export async function GET(req: Request) {
         "x-apisports-key": API_KEY,
       },
     });
-    console.log("Resposta completa da API-Sports:", response.data);
 
     if (response.data.errors && Object.keys(response.data.errors).length > 0) {
       console.error("A API retornou erros:", response.data.errors);
-      return NextResponse.json([]); // Retorna vazio para não quebrar o front
+      return NextResponse.json([]);
     }
 
     if (!response.data.response || response.data.response.length === 0) {

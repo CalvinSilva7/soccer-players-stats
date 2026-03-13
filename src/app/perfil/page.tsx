@@ -28,9 +28,7 @@ export default function Perfil() {
         );
         setLoading(false);
       })
-      .catch((err) => {
-        console.log("ERRO:", err);
-      });
+      .catch((err) => {});
   }, []);
 
   const handleUpdate = async () => {

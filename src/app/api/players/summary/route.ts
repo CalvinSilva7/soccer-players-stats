@@ -54,7 +54,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ summary: text });
   } catch (err) {
-    console.log("ERRO GROQ:", err);
     return NextResponse.json(
       { error: "Erro ao gerar resumo" },
       { status: 500 },
